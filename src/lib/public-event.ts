@@ -60,5 +60,5 @@ export const publicEvents: PublicEvent[] = [
 ];
 
 export function getPublicEvent(slug: string) {
-  return publicEvents.find((event) => event.slug === slug) ?? publicEvents[0];
+  return publicEvents.find((event) => event.slug === slug);
 }

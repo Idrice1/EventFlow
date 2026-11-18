@@ -67,10 +67,12 @@ describe("eventSchema", () => {
 
 describe("getPublicEvent", () => {
   it("returns a public event by slug", () => {
-    expect(getPublicEvent("afterglow-festival").title).toBe("Afterglow Festival");
+    expect(getPublicEvent("afterglow-festival")).toMatchObject({
+      title: "Afterglow Festival",
+    });
   });
 
-  it("falls back to the featured event for unknown slugs", () => {
-    expect(getPublicEvent("unknown-event").slug).toBe("afterglow-festival");
+  it("does not substitute an unrelated event for an unknown slug", () => {
+    expect(getPublicEvent("unknown-event")).toBeUndefined();
   });
 });

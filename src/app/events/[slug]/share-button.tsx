@@ -14,11 +14,10 @@ export function ShareButton({ title }: { title: string }) {
           url: window.location.href,
         });
         setMessage("Event shared.");
-        return;
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        setMessage("Event link copied.");
       }
-
-      await navigator.clipboard.writeText(window.location.href);
-      setMessage("Event link copied.");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       setMessage("Could not share this event. Copy the page URL to share it.");

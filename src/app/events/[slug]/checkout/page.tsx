@@ -11,16 +11,37 @@ export default function CheckoutPage() {
   const { slug } = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
   const event = getPublicEvent(slug);
-  const selectedId = searchParams.get("ticket") ?? event.tickets[0].id;
-  const selected = event.tickets.find((ticket) => ticket.id === selectedId) ?? event.tickets[0];
+  const selectedId = searchParams.get("ticket") ?? event?.tickets[0]?.id;
+  const selected = event?.tickets.find((ticket) => ticket.id === selectedId) ?? event?.tickets[0];
   const [quantity, setQuantity] = useState(1);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
 
-  const subtotal = selected.price * quantity;
+  const subtotal = selected ? selected.price * quantity : 0;
   const fees = Math.round(subtotal * 0.08);
   const total = subtotal + fees;
+
+  if (!event || !selected) {
+    return (
+      <main className="checkout-shell">
+        <nav className="checkout-nav">
+          <Link className="public-brand" href="/">
+            <span className="public-brand-mark" />
+            <span>eventflow</span>
+          </Link>
+        </nav>
+        <section className="checkout-confirmation">
+          <span className="checkout-kicker">Event unavailable</span>
+          <h1>We can’t find this event.</h1>
+          <p>It may have ended or the link may be incorrect.</p>
+          <Link className="checkout-primary unavailable-link" href="/">
+            Browse events
+          </Link>
+        </section>
+      </main>
+    );
+  }
 
   if (step === 3) {
     return (

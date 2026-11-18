@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, MapPin, Ticket } from "lucide-react";
 
 import { getPublicEvent } from "@/lib/public-event";
@@ -12,6 +13,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const event = getPublicEvent(slug);
+  if (!event) return { title: "Event not found" };
   return {
     title: `${event.title} — Tickets`,
     description: event.description,
@@ -26,6 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PublicEventPage({ params }: Props) {
   const { slug } = await params;
   const event = getPublicEvent(slug);
+  if (!event) notFound();
 
   return (
     <main className="public-event">
